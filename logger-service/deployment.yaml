@@ -28,7 +28,7 @@ spec:
         - name: tn-harbor-local-credential
       containers:
       - name: logger
-        image: nginx
+        image: tn.harbor.local/k8s-rnd/logger:v1
         imagePullPolicy: Always
         ports:
         - containerPort: 3000
