@@ -1,3 +1,4 @@
+const winston = require('winston');
 const cities = [
   { name: 'Tokyo', country: 'Japan', lat: 35.6762, lon: 139.6503 },
   { name: 'Delhi', country: 'India', lat: 28.6139, lon: 77.2090 },
@@ -71,22 +72,89 @@ const cities = [
   { name: 'Algiers', country: 'Algeria', lat: 36.7538, lon: 3.0588 },
   { name: 'Tunis', country: 'Tunisia', lat: 36.8065, lon: 10.1815 },
   { name: 'Auckland', country: 'New Zealand', lat: -36.8509, lon: 174.7645 },
-  { name: 'Wellington', country: 'New Zealand', lat: -41.2866, lon: 174.7756 }
+  { name: 'Wellington', country: 'New Zealand', lat: -41.2866, lon: 174.7756 },
+  { name: 'Minsk', country: 'Belarus', lat: 53.9045, lon: 27.5615 },
+  { name: 'Riga', country: 'Latvia', lat: 56.9496, lon: 24.1052 },
+  { name: 'Vilnius', country: 'Lithuania', lat: 54.6872, lon: 25.2797 },
+  { name: 'Tallinn', country: 'Estonia', lat: 59.4370, lon: 24.7536 },
+  { name: 'Zagreb', country: 'Croatia', lat: 45.8150, lon: 15.9819 },
+  { name: 'Sarajevo', country: 'Bosnia and Herzegovina', lat: 43.8563, lon: 18.4131 },
+  { name: 'Sofia', country: 'Bulgaria', lat: 42.6977, lon: 23.3219 },
+  { name: 'Bratislava', country: 'Slovakia', lat: 48.1486, lon: 17.1077 },
+  { name: 'Ljubljana', country: 'Slovenia', lat: 46.0569, lon: 14.5058 },
+  { name: 'Podgorica', country: 'Montenegro', lat: 42.4304, lon: 19.2594 },
+  { name: 'Skopje', country: 'North Macedonia', lat: 41.9973, lon: 21.4280 },
+  { name: 'Tirana', country: 'Albania', lat: 41.3275, lon: 19.8187 },
+  { name: 'Reykjavik', country: 'Iceland', lat: 64.1466, lon: -21.9426 },
+  { name: 'Doha', country: 'Qatar', lat: 25.2854, lon: 51.5310 },
+  { name: 'Muscat', country: 'Oman', lat: 23.5880, lon: 58.3829 },
+  { name: 'Abu Dhabi', country: 'UAE', lat: 24.4539, lon: 54.3773 },
+  { name: 'Manama', country: 'Bahrain', lat: 26.2235, lon: 50.5876 },
+  { name: 'Kuwait City', country: 'Kuwait', lat: 29.3759, lon: 47.9774 },
+  { name: 'Colombo', country: 'Sri Lanka', lat: 6.9271, lon: 79.8612 },
+  { name: 'Kathmandu', country: 'Nepal', lat: 27.7172, lon: 85.3240 },
+  { name: 'Thimphu', country: 'Bhutan', lat: 27.4728, lon: 89.6390 },
+  { name: 'Male', country: 'Maldives', lat: 4.1755, lon: 73.5093 },
+  { name: 'Islamabad', country: 'Pakistan', lat: 33.6844, lon: 73.0479 },
+  { name: 'Kabul', country: 'Afghanistan', lat: 34.5553, lon: 69.2075 },
+  { name: 'Tashkent', country: 'Uzbekistan', lat: 41.2995, lon: 69.2401 },
+  { name: 'Astana', country: 'Kazakhstan', lat: 51.1605, lon: 71.4704 },
+  { name: 'Bishkek', country: 'Kyrgyzstan', lat: 42.8746, lon: 74.5698 },
+  { name: 'Dushanbe', country: 'Tajikistan', lat: 38.5598, lon: 68.7870 },
+  { name: 'Ashgabat', country: 'Turkmenistan', lat: 37.9601, lon: 58.3261 },
+  { name: 'Yerevan', country: 'Armenia', lat: 40.1872, lon: 44.5152 },
+  { name: 'Tbilisi', country: 'Georgia', lat: 41.7151, lon: 44.8271 },
+  { name: 'Baku', country: 'Azerbaijan', lat: 40.4093, lon: 49.8671 },
+  { name: 'Addis Ababa', country: 'Ethiopia', lat: 9.0227, lon: 38.7468 },
+  { name: 'Nairobi', country: 'Kenya', lat: -1.2921, lon: 36.8219 },
+  { name: 'Kampala', country: 'Uganda', lat: 0.3476, lon: 32.5825 },
+  { name: 'Dar es Salaam', country: 'Tanzania', lat: -6.7924, lon: 39.2083 },
+  { name: 'Kigali', country: 'Rwanda', lat: -1.9441, lon: 30.0619 },
+  { name: 'Bujumbura', country: 'Burundi', lat: -3.3614, lon: 29.3599 },
+  { name: 'Lusaka', country: 'Zambia', lat: -15.3875, lon: 28.3228 },
+  { name: 'Harare', country: 'Zimbabwe', lat: -17.8252, lon: 31.0335 },
+  { name: 'Gaborone', country: 'Botswana', lat: -24.6282, lon: 25.9231 },
+  { name: 'Windhoek', country: 'Namibia', lat: -22.5609, lon: 17.0658 },
+  { name: 'Maputo', country: 'Mozambique', lat: -25.9692, lon: 32.5732 },
+  { name: 'Luanda', country: 'Angola', lat: -8.8383, lon: 13.2344 },
+  { name: 'Libreville', country: 'Gabon', lat: 0.4162, lon: 9.4673 },
+  { name: 'Brazzaville', country: 'Congo', lat: -4.2634, lon: 15.2429 },
+  { name: 'Kinshasa', country: 'DR Congo', lat: -4.4419, lon: 15.2663 },
+  { name: 'Dakar', country: 'Senegal', lat: 14.7167, lon: -17.4677 },
+  { name: 'Bamako', country: 'Mali', lat: 12.6392, lon: -8.0029 },
+  { name: 'Ouagadougou', country: 'Burkina Faso', lat: 12.3714, lon: -1.5197 },
+  { name: 'Accra', country: 'Ghana', lat: 5.6037, lon: -0.1870 },
+  { name: 'Abidjan', country: 'Ivory Coast', lat: 5.3599, lon: -4.0083 },
+  { name: 'Monrovia', country: 'Liberia', lat: 6.2907, lon: -10.7605 },
+  { name: 'Freetown', country: 'Sierra Leone', lat: 8.4840, lon: -13.2299 },
+  { name: 'Conakry', country: 'Guinea', lat: 9.6412, lon: -13.5784 }
 ];
+
+// Configure Winston logger
+const logger = winston.createLogger({
+  level: 'info', // Logging level
+  format: winston.format.combine(
+    winston.format.timestamp(), // Add timestamp
+    winston.format.json() // Output logs in JSON format
+  ),
+  transports: [
+    new winston.transports.Console() // Log to console
+  ]
+});
 
 // Add error handling and graceful shutdown
 process.on('SIGTERM', () => {
-  console.log('Received SIGTERM. Performing graceful shutdown...');
+  logger.info('Received SIGTERM. Performing graceful shutdown...');
   process.exit(0);
 });
 
 process.on('SIGINT', () => {
-  console.log('Received SIGINT. Performing graceful shutdown...');
+  logger.info('Received SIGINT. Performing graceful shutdown...');
   process.exit(0);
 });
 
 process.on('uncaughtException', (error) => {
-  console.error('Uncaught Exception:', error);
+  logger.error('Uncaught Exception:', error);
   process.exit(1);
 });
 
@@ -96,11 +164,11 @@ const getRandomCity = () => {
 
 const logWithTimestamp = () => {
   try {
-    const timestamp = new Date().toISOString();
     const city = getRandomCity();
-    console.log(`[${timestamp}] City: ${city.name}, ${city.country} | Coordinates: ${city.lat}°N, ${city.lon}°E`);
+    const logMessage = `City: ${city.name}, ${city.country} | Coordinates: ${city.lat}°N, ${city.lon}°E`;
+    logger.info(logMessage); // Log using Winston
   } catch (error) {
-    console.error('Error in logWithTimestamp:', error);
+    logger.error('Error in logWithTimestamp:', error);
   }
 };
 
@@ -117,10 +185,9 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(3000, () => {
-  console.log('Health check endpoint available on port 3000');
+  logger.info('Health check endpoint available on port 3000');
 });
 
 // Log every second
 const interval = setInterval(logWithTimestamp, 1000);
-console.log('World cities coordinates logger started...');
-
+logger.info('World cities coordinates logger started...');
