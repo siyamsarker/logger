@@ -11,7 +11,7 @@ data:
     positions:
       filename: /tmp/positions.yaml
     clients:
-      - url: http://loki:3100/loki/api/v1/push  # Replace with your Loki service address
+      - url: http://192.168.61.53:3100/loki/api/v1/push  # Replace with your Loki service address
     scrape_configs:
       - job_name: kubernetes-pods
         kubernetes_sd_configs:
