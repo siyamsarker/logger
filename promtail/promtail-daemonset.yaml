@@ -14,7 +14,7 @@ spec:
       labels:
         app: promtail
     spec:
-      serviceAccountName: promtail-sa  # Add this line
+      serviceAccountName: promtail-sa
       containers:
       - name: promtail
         image: grafana/promtail:latest
@@ -26,9 +26,6 @@ spec:
         - name: pods
           mountPath: /var/log/pods
           readOnly: true
-        - name: containers
-          mountPath: /var/lib/containers
-          readOnly: true
       volumes:
       - name: config
         configMap:
@@ -36,6 +33,3 @@ spec:
       - name: pods
         hostPath:
           path: /var/log/pods
-      - name: containers
-        hostPath:
-          path: /var/lib/containers

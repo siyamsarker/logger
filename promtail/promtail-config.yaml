@@ -8,30 +8,26 @@ data:
     server:
       http_listen_port: 9080
       grpc_listen_port: 0
-
     positions:
       filename: /tmp/positions.yaml
-
     clients:
-      - url: http://192.168.169.64:3100/loki/api/v1/push  # Replace with your Loki service IP
-
+      - url: http://loki:3100/loki/api/v1/push  # Replace with your Loki service address
     scrape_configs:
       - job_name: kubernetes-pods
         kubernetes_sd_configs:
           - role: pod
         relabel_configs:
-          - source_labels: [__meta_kubernetes_pod_label_app]
-            action: keep
-            regex: logger
-          - source_labels: [__meta_kubernetes_pod_container_name]
-            action: replace
-            target_label: container
-          - source_labels: [__meta_kubernetes_pod_namespace]
+          - action: labelmap
+            regex: __meta_kubernetes_pod_label_(.+)
+          - source_labels: [__meta_kubernetes_namespace]
             action: replace
             target_label: namespace
           - source_labels: [__meta_kubernetes_pod_name]
             action: replace
             target_label: pod
+          - source_labels: [__meta_kubernetes_pod_container_name]
+            action: replace
+            target_label: container
           - source_labels: [__meta_kubernetes_pod_node_name]
             action: replace
             target_label: node
